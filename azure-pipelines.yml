@@ -1,0 +1,50 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18'
+  displayName: 'Install Node.js'
+
+- script: npm run setup
+  displayName: 'Install Playwright browsers and dependencies'
+
+- script: npm run test
+  displayName: 'Run Playwright tests'
+  env:
+    CI: true
+    ASSET_CHECKOUT_APP_URL: $(ASSET_CHECKOUT_APP_URL)
+    ASSET_ADMIN_EMAIL: $(ASSET_ADMIN_EMAIL)
+    ASSET_ADMIN_PASSWORD: $(ASSET_ADMIN_PASSWORD)
+    ASSET_MANAGER_EMAIL: $(ASSET_MANAGER_EMAIL)
+    ASSET_MANAGER_PASSWORD: $(ASSET_MANAGER_PASSWORD)
+
+- task: PublishTestResults@2
+  displayName: 'Publish test results'
+  inputs:
+    searchFolder: 'playwright/test-results'
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'e2e-junit-results.xml'
+    mergeTestResults: true
+    failTaskOnFailedTests: true
+    testRunTitle: 'My End-To-End Tests'
+  condition: succeededOrFailed()
+  
+- task: PublishPipelineArtifact@1
+  displayName: Publish test report
+  condition: succeededOrFailed()
+  inputs:
+    targetPath: playwright/test-report
+    artifact: test-report
+    publishLocation: 'pipeline'
+
+- task: PublishHtmlReport@1
+  displayName: Publish Playwright test report
+  condition: succeededOrFailed()
+  inputs:
+    reportDir: 'playwright/test-report/index.html'
+    tabName: 'Playwright report'

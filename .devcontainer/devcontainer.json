@@ -1,0 +1,24 @@
+{
+  "image": "mcr.microsoft.com/playwright:v1.32.3-focal",
+  "postCreateCommand": "npm install",
+  "runArgs": [
+    "--env-file",
+    ".devcontainer/devcontainer.env"
+  ],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash"
+          }
+        },
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.defaultProfile.windows": "Windows PowerShell"
+      },
+      "extensions": [
+        "ms-playwright.playwright"
+      ]
+    }
+  }
+}

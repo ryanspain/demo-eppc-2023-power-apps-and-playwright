@@ -1,0 +1,14 @@
+{
+    "name": "power-apps-tests",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "setup": "npm install && npx playwright install",
+        "test": "npx playwright test"
+    },
+    "author": "Ryan Spain",
+    "license": "MIT",
+    "devDependencies": {
+        "@playwright/test": "^1.32.3"
+    }
+}
